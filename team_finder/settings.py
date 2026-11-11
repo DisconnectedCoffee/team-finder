@@ -21,8 +21,11 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    'users.apps.UsersConfig',
+    'projects.apps.ProjectsConfig',
 ]
 
+AUTH_USER_MODEL = 'users.User'
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -42,6 +45,7 @@ TEMPLATES = [
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
+                'django.template.context_processors.debug',
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
@@ -63,7 +67,7 @@ DATABASES = {
         "USER": config("POSTGRES_USER"),
         "PASSWORD": config("POSTGRES_PASSWORD"),
         "HOST": config("POSTGRES_HOST", default="localhost"),
-        "PORT": config("POSTGRES_PORT", default=5432, cast=int),
+        "PORT": config("POSTGRES_PORT", default=5436),
     }
 }
 
@@ -111,6 +115,10 @@ STATICFILES_DIRS = [BASE_DIR / "static"]
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
+
+LOGIN_URL = '/users/login/'
+LOGIN_REDIRECT_URL = '/projects/list/'
+LOGOUT_REDIRECT_URL = '/projects/list/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
