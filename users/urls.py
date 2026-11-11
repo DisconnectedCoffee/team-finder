@@ -17,6 +17,7 @@ urlpatterns = [
     path("login/", login_view, name="login"),
     path("logout/", logout_view, name="logout"),
     path("edit/", edit_profile_view, name="edit_profile"),
+    path("edit-profile/", edit_profile_view, name="edit_profile_alias"),
     path("change-password/", change_password_view, name="change_password"),
     path("<int:pk>/", user_detail_view, name="user_detail"),
 ]

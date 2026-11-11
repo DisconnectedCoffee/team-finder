@@ -21,7 +21,7 @@ urlpatterns = [
     path("<int:pk>/edit/", edit_project_view, name="project_edit"),
     path("<int:pk>/complete/", complete_project_view, name="project_complete"),
     path("<int:pk>/toggle-participate/", toggle_participate_view, name="toggle_participate"),
-    path("<int:pk>/skills/add", add_project_skill, name="add_project_skill"),
+    path("<int:pk>/skills/add/", add_project_skill, name="add_project_skill"),
     path("<int:pk>/skills/<int:skill_id>/remove/",
          remove_project_skill, name="remove_project_skill"),
 ]

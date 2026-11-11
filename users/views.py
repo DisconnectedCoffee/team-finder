@@ -14,10 +14,10 @@ def participants_view(request):
 
     paginator = Paginator(participants_list, 12)
     page_number = request.GET.get("page")
-    participants = paginator.get_page(page_number)
+    page_obj = paginator.get_page(page_number)
 
     return render(request, "users/participants.html", {
-        "participants": participants
+        "page_obj": page_obj
     })
 
 

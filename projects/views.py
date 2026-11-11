@@ -1,14 +1,15 @@
+import json
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
+from django.core.paginator import Paginator
 from .models import Project, Skill
 from .forms import ProjectForm
-from django.core.paginator import Paginator
 
 
 def project_list_view(request):
-    """Главная страница со списком проектов, пагинацией и фильтрацией по навыкам (Вариант 3)."""
+    """Главная страница со списком проектов и фильтрацией по навыкам"""
     skill_filter = request.GET.get("skill")
     projects_list = Project.objects.all().order_by("-created_at")
 
@@ -17,12 +18,12 @@ def project_list_view(request):
 
     paginator = Paginator(projects_list, 12)
     page_number = request.GET.get("page")
-    projects = paginator.get_page(page_number)
+    page_obj = paginator.get_page(page_number)
 
     all_skills = Skill.objects.all().order_by("name")
 
     return render(request, "projects/project_list.html", {
-        "projects": projects,
+        "page_obj": page_obj,
         "all_skills": all_skills,
         "active_skill": skill_filter,
     })
@@ -109,6 +110,14 @@ def add_project_skill(request, pk):
     skill_id = request.POST.get("skill_id")
     name = request.POST.get("name")
 
+    if not skill_id and not name and request.body:
+        try:
+            body_data = json.loads(request.body)
+            skill_id = body_data.get("skill_id")
+            name = body_data.get("name")
+        except json.JSONDecodeError:
+            pass
+
     created = False
     if skill_id:
         skill = get_object_or_404(Skill, pk=skill_id)
@@ -124,7 +133,8 @@ def add_project_skill(request, pk):
         added = False
 
     return JsonResponse({
-        "skill_id": skill.id,
+        "id": skill.id,
+        "name": skill.name,
         "created": created,
         "added": added
     })
